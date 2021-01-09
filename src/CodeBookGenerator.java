@@ -7,6 +7,7 @@ public class CodeBookGenerator {
             var pixels = VectorQuantizer.getPixels();
             var vectors = vector.getVectors(pixels,10,10);
             var averageVector = vector.getAverage(vectors);
+            var tmp = averageVector.split();
 
 
         } catch (Exception ex) {
@@ -14,6 +15,6 @@ public class CodeBookGenerator {
             ex.printStackTrace();
         }
 
-
+    return null;
     }
 }

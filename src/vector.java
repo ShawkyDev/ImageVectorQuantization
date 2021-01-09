@@ -2,12 +2,12 @@ import java.util.ArrayList;
 
 public class vector {
     private int h, w;
-    public double[][] arr;
+    public MyPixel[][] arr;
 
     public vector(int a, int b) {
         h = a;
         w = b;
-        arr = new double[h][w];
+        arr = new MyPixel[h][w];
     }
 
     public vector add(vector lhs) throws Exception {
@@ -16,7 +16,7 @@ public class vector {
         vector ret = new vector(h, w);
         for (int i = 0; i < h; ++i)
             for (int j = 0; j < w; ++j)
-                ret.arr[i][j] = lhs.arr[i][j] + this.arr[i][j];
+                ret.arr[i][j] = lhs.arr[i][j].add(this.arr[i][j]);
         return ret;
     }
 
@@ -25,7 +25,7 @@ public class vector {
             throw new Exception("can't add two vecotrs with diffrent size");
         for (int i = 0; i < h; ++i)
             for (int j = 0; j < w; ++j)
-                this.arr[i][j] += lhs.arr[i][j];
+                this.arr[i][j].addOnME(lhs.arr[i][j]);
     }
 
     public static vector[][] getVectors(int[][] arr, int h, int w) throws Exception {
@@ -37,9 +37,12 @@ public class vector {
         for (int r = 0; r < H; ++r) {
             for (int c = 0; c < W; ++c) {
                 vector tmp = new vector(h, w);
-                for (int i = 0; i < h; ++i)
-                    for (int j = 0; j < w; ++j)
-                        tmp.arr[i][j] = arr[i + r * H][j + c * W];
+                for (int i = 0; i < h; ++i) {
+                    for (int j = 0; j < w; ++j) {
+                        MyPixel pxl = new MyPixel(arr[i + r * H][j + c * W]);
+                        tmp.arr[i][j] = pxl;
+                    }
+                }
                 ret[r][c] = tmp;
             }
         }
@@ -49,7 +52,7 @@ public class vector {
     public void divideME(int d) {
         for (int i = 0; i < h; ++i)
             for (int j = 0; j < w; ++j)
-                arr[i][j] /= d;
+                arr[i][j].divideME(d);
     }
 
     public static vector getAverage(vector[][] input) throws Exception {
@@ -71,8 +74,17 @@ public class vector {
         low = new vector(h, w);
         for (int i = 0; i < h; ++i) {
             for (int j = 0; j < w; ++j) {
-                hi.arr[i][j] = (int) (arr[i][j] + 1);
-                low.arr[i][j] = hi.arr[i][j] - 1;
+                hi.arr[i][j].red = (int) (arr[i][j].red + 1);
+                low.arr[i][j].red = hi.arr[i][j].red - 1;
+
+                hi.arr[i][j].blue = (int) (arr[i][j].blue + 1);
+                low.arr[i][j].blue = hi.arr[i][j].blue - 1;
+
+                hi.arr[i][j].green = (int) (arr[i][j].green + 1);
+                low.arr[i][j].green = hi.arr[i][j].green - 1;
+
+                hi.arr[i][j].alpha = (int) (arr[i][j].alpha + 1);
+                low.arr[i][j].alpha = hi.arr[i][j].alpha - 1;
             }
         }
         var ret = new ArrayList<vector>();
