@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.security.spec.ECField;
 
 public class MyPixel {
     public double red;
@@ -16,6 +17,7 @@ public class MyPixel {
         blue = col.getBlue();
         green = col.getGreen();
         alpha = col.getAlpha();
+
     }
 
     public  MyPixel add(MyPixel lhs) {
@@ -33,11 +35,25 @@ public class MyPixel {
         green+=lhs.green;
         alpha+=lhs.alpha;
     }
-    public void divideME(double x){
+    public void divideME(double x)throws Exception{
+        if(x== 0)
+            throw new Exception("diving be zeor!");
         red /= x;
         blue/=x;
         green/=x;
         alpha/=x;
     }
+    public int toInt(){
+        return (((int)alpha)<<24) |(((int)red)<<16) | (((int)green)<<8) | (int)blue;
 
+    }
+    @Override
+    public String toString() {
+        return "[" +
+                "red=" + red +
+                ", blue=" + blue +
+                ", green=" + green +
+                ", alpha=" + alpha +
+                ']';
+    }
 }

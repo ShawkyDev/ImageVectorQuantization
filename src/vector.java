@@ -1,13 +1,17 @@
+import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
 
 public class vector {
-    private int h, w;
+    public int h, w;
     public MyPixel[][] arr;
 
     public vector(int a, int b) {
         h = a;
         w = b;
         arr = new MyPixel[h][w];
+        for (int i = 0; i < h; ++i)
+            for (int j = 0; j < w; ++j)
+                arr[i][j] = new MyPixel(0);
     }
 
     public vector add(vector lhs) throws Exception {
@@ -24,23 +28,26 @@ public class vector {
         if (lhs.h != this.h || lhs.w != this.w)
             throw new Exception("can't add two vecotrs with diffrent size");
         for (int i = 0; i < h; ++i)
-            for (int j = 0; j < w; ++j)
+            for (int j = 0; j < w; ++j) {
+
                 this.arr[i][j].addOnME(lhs.arr[i][j]);
+            }
     }
 
-    public static vector[][] getVectors(int[][] arr, int h, int w) throws Exception {
-        if (arr == null || arr.length % h != 0 || arr[0].length % w != 0)
+    public static vector[][] getVectors(int[][] _arr, int _h, int _w) throws Exception {
+        if (_arr == null || _arr.length % _h != 0 || _arr[0].length % _w != 0)
             throw new Exception("can't construct the array of vectors");
-        int H = arr.length / h;
-        int W = arr[0].length / w;
+        //System.out.println("arr:"+_arr.length + " arr[0]:"+_arr[0].length);
+        int H = _arr.length / _h;
+        int W = _arr[0].length / _w;
         vector[][] ret = new vector[H][W];
         for (int r = 0; r < H; ++r) {
             for (int c = 0; c < W; ++c) {
-                vector tmp = new vector(h, w);
-                for (int i = 0; i < h; ++i) {
-                    for (int j = 0; j < w; ++j) {
-                        MyPixel pxl = new MyPixel(arr[i + r * H][j + c * W]);
-                        tmp.arr[i][j] = pxl;
+                vector tmp = new vector(_h, _w);
+                //System.out.println("r = " + r + " c = " + c);
+                for (int i = 0; i < _h; ++i) {
+                    for (int j = 0; j < _w; ++j) {
+                        tmp.arr[i][j] = new MyPixel(_arr[i + r * _h][j + c * _w]);
                     }
                 }
                 ret[r][c] = tmp;
@@ -49,14 +56,14 @@ public class vector {
         return ret;
     }
 
-    public void divideME(int d) {
+    public void divideME(int d) throws Exception {
         for (int i = 0; i < h; ++i)
             for (int j = 0; j < w; ++j)
                 arr[i][j].divideME(d);
     }
 
     public static vector getAverage(vector[][] input) throws Exception {
-        vector ret = new vector(input[0][0].h, input[0][0].h);
+        vector ret = new vector(input[0][0].h, input[0][0].w);
         int cnt = 0;
         for (int i = 0; i < input.length; ++i) {
             for (int j = 0; j < input[i].length; ++j) {
@@ -65,6 +72,34 @@ public class vector {
             }
         }
         ret.divideME(cnt);
+        return ret;
+    }
+
+    public static vector getAverage(vector[] input) throws Exception {
+        vector ret = new vector(input[0].h, input[0].h);
+        int cnt = 0;
+        for (int i = 0; i < input.length; ++i) {
+            ret.addOnME(input[i]);
+            cnt++;
+        }
+        ret.divideME(cnt);
+        return ret;
+    }
+
+    public int calcError(vector lhs) throws Exception {
+        if (lhs.h != this.h || lhs.w != this.w)
+            throw new Exception("can't add two vecotrs with diffrent size");
+        int ret = 0;
+        for (int i = 0; i < h; ++i)
+            for (int j = 0; j < w; ++j)
+                ret += (arr[i][j].red - lhs.arr[i][j].red) * (arr[i][j].red - lhs.arr[i][j].red)+
+
+                        (arr[i][j].blue - lhs.arr[i][j].blue) * (arr[i][j].blue - lhs.arr[i][j].blue) +
+
+                        (arr[i][j].green - lhs.arr[i][j].green) * (arr[i][j].green - lhs.arr[i][j].green) +
+
+                        (arr[i][j].alpha - lhs.arr[i][j].alpha) * (arr[i][j].alpha - lhs.arr[i][j].alpha);
+
         return ret;
     }
 
@@ -91,6 +126,14 @@ public class vector {
         ret.add(hi);
         ret.add(low);
         return ret;
+    }
+
+    public void print() {
+
+        System.out.println("-----------------");
+        for (int i = 0; i < h; ++i)
+            for (int j = 0; j < w; ++j)
+                System.out.print(arr[i][j].toString() + " " + ((j == w - 1) ? "\n" : ","));
     }
 
 }
