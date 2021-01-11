@@ -48,6 +48,9 @@ cmake-build-*/
 
 # IntelliJ
 out/
+# file: ~/.gitignore_global
+.DS_Store
+.idea
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/
