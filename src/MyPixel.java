@@ -1,5 +1,5 @@
 import java.awt.Color;
-import java.security.spec.ECField;
+import java.util.Objects;
 
 public class MyPixel {
     public double red;
@@ -20,7 +20,7 @@ public class MyPixel {
 
     }
 
-    public  MyPixel add(MyPixel lhs) {
+    public MyPixel add(MyPixel lhs) {
         MyPixel ret = new MyPixel();
         ret.red = lhs.red + this.red;
         ret.blue = lhs.blue + this.blue;
@@ -29,14 +29,27 @@ public class MyPixel {
         return ret;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MyPixel myPixel = (MyPixel) o;
+        return Double.compare(myPixel.red, red) == 0 &&
+                Double.compare(myPixel.blue, blue) == 0 &&
+                Double.compare(myPixel.green, green) == 0 &&
+                Double.compare(myPixel.alpha, alpha) == 0;
+    }
+
+
     public void addOnME(MyPixel lhs) {
         red += lhs.red;
-        blue+=lhs.blue;
-        green+=lhs.green;
-        alpha+=lhs.alpha;
+        blue += lhs.blue;
+        green += lhs.green;
+        alpha += lhs.alpha;
     }
-    public void divideME(double x)throws Exception{
-        if(x== 0)
+
+    public void divideME(double x) throws Exception {
+        if (x == 0)
             throw new Exception("diving be zeor!");
         red /= x;
         blue/=x;
@@ -44,7 +57,7 @@ public class MyPixel {
         alpha/=x;
     }
     public int toInt(){
-        return (((int)alpha)<<24) |(((int)red)<<16) | (((int)green)<<8) | (int)blue;
+        return ((((int) alpha)) << 24) | ((((int) red)) << 16) | ((((int) green)) << 8) | (int) blue;
 
     }
     @Override

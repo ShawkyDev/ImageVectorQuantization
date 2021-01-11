@@ -1,6 +1,7 @@
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 public class CodeBookGenerator {
     final static int OO = Integer.MAX_VALUE;
@@ -59,10 +60,15 @@ public class CodeBookGenerator {
                 newAvg[i].divideME(newAvgCnt[i]);
 
         }
+        int matches = 0;
+        for (var vec : newAvg)
+            for(var vec2 : avgs)
+                if(vec.equals(vec2)) matches++;
+
         avgs.clear();
-        for (var vec : newAvg) {
-            avgs.add(vec);
-        }
+        Collections.addAll(avgs, newAvg);
+        if(matches>0)
+            reCalcAvg(avgs,vectors);
     }
     public static String[][] BuildCompressed( ArrayList<vector>book) throws Exception{
         var compressed = new String [_vectors.length][];
@@ -80,7 +86,7 @@ public class CodeBookGenerator {
                     idx++;
                 }
 
-                System.out.println(compressed[i][j]=Integer.toBinaryString(bstIdx));
+                compressed[i][j]=Integer.toBinaryString(bstIdx);
             }
         }
         return compressed;

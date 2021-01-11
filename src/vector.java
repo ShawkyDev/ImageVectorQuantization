@@ -1,5 +1,7 @@
 import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Objects;
 
 public class vector {
     public int h, w;
@@ -102,6 +104,23 @@ public class vector {
 
         return ret;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        vector  vector= (vector) o;
+        return h == vector.h &&
+                w == vector.w &&
+                Arrays.equals(arr, vector.arr);
+    }
+
+
+
+
+
+
+
 
     public ArrayList<vector> split() {
         vector hi, low;

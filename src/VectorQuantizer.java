@@ -3,22 +3,25 @@ import java.io.File;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
 import javax.imageio.ImageIO;
 
 public class VectorQuantizer {
 
-    static String imgPath = "D:\\img.jpg";
+    static String imgPath = "D:\\pp.jpg";
+    static String outPath = "D:\\out1.jpg";
 
     public static int[][] readImage() throws IOException {
         int[][] pixels;
         File file = new File(imgPath);
         BufferedImage img = ImageIO.read(file);
         int height = img.getHeight();
-        int width = img.getWidth();
+        int width = 780;
+        //System.out.println("h=" + height + " , w=" + width);
         pixels = new int[height][width];
         for (int i = 0; i < height; ++i)
             for (int j = 0; j < width; ++j)
-                pixels[i][j] = img.getRGB(i, j);
+                pixels[i][j] = img.getRGB(j, i);
         return pixels;
 
     }
@@ -27,12 +30,12 @@ public class VectorQuantizer {
         int H = imagePixels.length;
         int W = imagePixels[0].length;
         BufferedImage img = new BufferedImage(W, H, BufferedImage.TYPE_3BYTE_BGR);
+        System.out.println("--h:" + img.getHeight() + " --w:" + img.getWidth());
 
-        for (int x = 0; x < W; x++) {
-            for (int y = 0; y < H; y++) {
-                int pix = imagePixels[x][y];
-                img.setRGB(x, y, pix);
-
+        for (int i = 0; i < H; i++) {
+            for (int j = 0; j < W; j++) {
+                int pix = imagePixels[i][j];
+                img.setRGB(j, i, pix);
             }
         }
 
@@ -62,17 +65,24 @@ public class VectorQuantizer {
             }
         }
         System.out.println("cnt = " + cnt);
-        writeImage(pixels, "D:\\newimg.jpg");
+        writeImage(pixels, outPath);
     }
 
 
     public static void main(String[] args) {
         try {
-            var pixels = readImage();
-            var book = CodeBookGenerator.generateCodeBook(pixels, 4, 4, 8);
-            var codes = CodeBookGenerator.BuildCompressed(book);
-            buildCompressedImage(codes, book);
-
+            var input = new Scanner(System.in);
+            int x=0;
+            while(x!=-1) {
+                x=input.nextInt();
+                var y =input.nextInt();
+                outPath = "D:\\" + x + "out" +y+".jpg";
+                imgPath = "D:\\shawky.jpg";
+                var pixels = readImage();
+                var book = CodeBookGenerator.generateCodeBook(pixels, x, x, y);
+                var codes = CodeBookGenerator.BuildCompressed(book);
+                buildCompressedImage(codes, book);
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
             System.out.println(ex.getMessage());
