@@ -16,8 +16,7 @@ public class VectorQuantizer {
         File file = new File(imgPath);
         BufferedImage img = ImageIO.read(file);
         int height = img.getHeight();
-        int width = 780;
-        //System.out.println("h=" + height + " , w=" + width);
+        int width = img.getWidth();
         pixels = new int[height][width];
         for (int i = 0; i < height; ++i)
             for (int j = 0; j < width; ++j)
@@ -30,8 +29,6 @@ public class VectorQuantizer {
         int H = imagePixels.length;
         int W = imagePixels[0].length;
         BufferedImage img = new BufferedImage(W, H, BufferedImage.TYPE_3BYTE_BGR);
-        System.out.println("--h:" + img.getHeight() + " --w:" + img.getWidth());
-
         for (int i = 0; i < H; i++) {
             for (int j = 0; j < W; j++) {
                 int pix = imagePixels[i][j];
@@ -49,13 +46,13 @@ public class VectorQuantizer {
         }
     }
 
-    public static void buildCompressedImage(String[][] codes, ArrayList<vector> book) {
+    public static void buildCompressedImage(String[][] codes, ArrayList<PixelMatrix> book) {
         var pixels = new int[codes.length * book.get(0).h][codes[0].length * book.get(0).w];
         int cnt = 0;
         for (int r = 0; r < codes.length; ++r) {
             for (int c = 0; c < codes[r].length; ++c) {
 
-                vector tmp = book.get(Integer.parseInt(codes[r][c], 2));
+                PixelMatrix tmp = book.get(Integer.parseInt(codes[r][c], 2));
                 for (int i = 0; i < tmp.h; ++i) {
                     for (int j = 0; j < tmp.w; ++j) {
                         pixels[i + r * tmp.h][j + c * tmp.w] = tmp.arr[i][j].toInt();

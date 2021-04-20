@@ -3,11 +3,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class vector {
+public class PixelMatrix {
     public int h, w;
     public MyPixel[][] arr;
 
-    public vector(int a, int b) {
+    public PixelMatrix(int a, int b) {
         h = a;
         w = b;
         arr = new MyPixel[h][w];
@@ -16,19 +16,19 @@ public class vector {
                 arr[i][j] = new MyPixel(0);
     }
 
-    public vector add(vector lhs) throws Exception {
+    public PixelMatrix add(PixelMatrix lhs) throws Exception {
         if (lhs.h != this.h || lhs.w != this.w)
-            throw new Exception("can't add two vecotrs with diffrent size");
-        vector ret = new vector(h, w);
+            throw new Exception("can't add two Matrices with different size");
+        PixelMatrix ret = new PixelMatrix(h, w);
         for (int i = 0; i < h; ++i)
             for (int j = 0; j < w; ++j)
                 ret.arr[i][j] = lhs.arr[i][j].add(this.arr[i][j]);
         return ret;
     }
 
-    public void addOnME(vector lhs) throws Exception {
+    public void addOnME(PixelMatrix lhs) throws Exception {
         if (lhs.h != this.h || lhs.w != this.w)
-            throw new Exception("can't add two vecotrs with diffrent size");
+            throw new Exception("can't add two Matrices with different size");
         for (int i = 0; i < h; ++i)
             for (int j = 0; j < w; ++j) {
 
@@ -36,16 +36,16 @@ public class vector {
             }
     }
 
-    public static vector[][] getVectors(int[][] _arr, int _h, int _w) throws Exception {
+    public static PixelMatrix[][] getVectors(int[][] _arr, int _h, int _w) throws Exception {
         if (_arr == null || _arr.length % _h != 0 || _arr[0].length % _w != 0)
             throw new Exception("can't construct the array of vectors");
-        //System.out.println("arr:"+_arr.length + " arr[0]:"+_arr[0].length);
+
         int H = _arr.length / _h;
         int W = _arr[0].length / _w;
-        vector[][] ret = new vector[H][W];
+        PixelMatrix[][] ret = new PixelMatrix[H][W];
         for (int r = 0; r < H; ++r) {
             for (int c = 0; c < W; ++c) {
-                vector tmp = new vector(_h, _w);
+                PixelMatrix tmp = new PixelMatrix(_h, _w);
                 //System.out.println("r = " + r + " c = " + c);
                 for (int i = 0; i < _h; ++i) {
                     for (int j = 0; j < _w; ++j) {
@@ -64,8 +64,8 @@ public class vector {
                 arr[i][j].divideME(d);
     }
 
-    public static vector getAverage(vector[][] input) throws Exception {
-        vector ret = new vector(input[0][0].h, input[0][0].w);
+    public static PixelMatrix getAverage(PixelMatrix[][] input) throws Exception {
+        PixelMatrix ret = new PixelMatrix(input[0][0].h, input[0][0].w);
         int cnt = 0;
         for (int i = 0; i < input.length; ++i) {
             for (int j = 0; j < input[i].length; ++j) {
@@ -77,8 +77,8 @@ public class vector {
         return ret;
     }
 
-    public static vector getAverage(vector[] input) throws Exception {
-        vector ret = new vector(input[0].h, input[0].h);
+    public static PixelMatrix getAverage(PixelMatrix[] input) throws Exception {
+        PixelMatrix ret = new PixelMatrix(input[0].h, input[0].h);
         int cnt = 0;
         for (int i = 0; i < input.length; ++i) {
             ret.addOnME(input[i]);
@@ -88,13 +88,13 @@ public class vector {
         return ret;
     }
 
-    public int calcError(vector lhs) throws Exception {
+    public int calcError(PixelMatrix lhs) throws Exception {
         if (lhs.h != this.h || lhs.w != this.w)
             throw new Exception("can't add two vecotrs with diffrent size");
         int ret = 0;
         for (int i = 0; i < h; ++i)
             for (int j = 0; j < w; ++j)
-                ret += (arr[i][j].red - lhs.arr[i][j].red) * (arr[i][j].red - lhs.arr[i][j].red)+
+                ret += (arr[i][j].red - lhs.arr[i][j].red) * (arr[i][j].red - lhs.arr[i][j].red) +
 
                         (arr[i][j].blue - lhs.arr[i][j].blue) * (arr[i][j].blue - lhs.arr[i][j].blue) +
 
@@ -109,23 +109,17 @@ public class vector {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        vector  vector= (vector) o;
-        return h == vector.h &&
-                w == vector.w &&
-                Arrays.equals(arr, vector.arr);
+        PixelMatrix PixelMatrix = (PixelMatrix) o;
+        return h == PixelMatrix.h &&
+                w == PixelMatrix.w &&
+                Arrays.equals(arr, PixelMatrix.arr);
     }
 
 
-
-
-
-
-
-
-    public ArrayList<vector> split() {
-        vector hi, low;
-        hi = new vector(h, w);
-        low = new vector(h, w);
+    public ArrayList<PixelMatrix> split() {
+        PixelMatrix hi, low;
+        hi = new PixelMatrix(h, w);
+        low = new PixelMatrix(h, w);
         for (int i = 0; i < h; ++i) {
             for (int j = 0; j < w; ++j) {
                 hi.arr[i][j].red = (int) (arr[i][j].red + 1);
@@ -141,7 +135,7 @@ public class vector {
                 low.arr[i][j].alpha = hi.arr[i][j].alpha - 1;
             }
         }
-        var ret = new ArrayList<vector>();
+        var ret = new ArrayList<PixelMatrix>();
         ret.add(hi);
         ret.add(low);
         return ret;
