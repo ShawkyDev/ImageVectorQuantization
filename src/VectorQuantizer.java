@@ -67,25 +67,26 @@ public class VectorQuantizer {
 
 
     public static void main(String[] args) {
-        try {
-            var input = new Scanner(System.in);
-            int x=0;
-            while(x!=-1) {
-                x=input.nextInt();
-                var y =input.nextInt();
-                outPath = "D:\\" + x + "out" +y+".jpg";
-                imgPath = "D:\\shawky.jpg";
-                var pixels = readImage();
-                var book = CodeBookGenerator.generateCodeBook(pixels, x, x, y);
-                var codes = CodeBookGenerator.BuildCompressed(book);
-                buildCompressedImage(codes, book);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            System.out.println(ex.getMessage());
+        if (args.length == 0) {
+            System.out.println("no arguments provided");
+            return;
         }
-
-
+        switch (args[0]) {
+            case "help":
+            {
+                //to do
+            }
+            case "c":
+            case "compress": {
+                //to do
+            }
+            case "d":
+            case "decompress": {
+                //to do
+            }
+            default:
+                break;
+        }
     }
 }
 
