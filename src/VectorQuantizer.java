@@ -3,15 +3,12 @@ import java.io.File;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Scanner;
 import javax.imageio.ImageIO;
 
 public class VectorQuantizer {
+    static double version_number = 1.0;
 
-    static String imgPath = "D:\\pp.jpg";
-    static String outPath = "D:\\out1.jpg";
-
-    public static int[][] readImage() throws IOException {
+    public static int[][] readImage(String imgPath) throws IOException {
         int[][] pixels;
         File file = new File(imgPath);
         BufferedImage img = ImageIO.read(file);
@@ -46,7 +43,7 @@ public class VectorQuantizer {
         }
     }
 
-    public static void buildCompressedImage(String[][] codes, ArrayList<PixelMatrix> book) {
+    public static void buildCompressedImage(String[][] codes, ArrayList<PixelMatrix> book, String outPath) {
         var pixels = new int[codes.length * book.get(0).h][codes[0].length * book.get(0).w];
         int cnt = 0;
         for (int r = 0; r < codes.length; ++r) {
@@ -61,31 +58,27 @@ public class VectorQuantizer {
                 }
             }
         }
-        System.out.println("cnt = " + cnt);
         writeImage(pixels, outPath);
     }
-
-
     public static void main(String[] args) {
-        if (args.length == 0) {
-            System.out.println("no arguments provided");
-            return;
-        }
-        switch (args[0]) {
-            case "help":
-            {
-                //to do
+        try {
+            if (args.length < 5) {
+                System.err.println("error : too few arguments");
+                System.out.println("the command should be:");
+                System.out.println("<Image-Path> <Vector-Height> <Vector-Width> <number-of-samples>");
+                return;
             }
-            case "c":
-            case "compress": {
-                //to do
-            }
-            case "d":
-            case "decompress": {
-                //to do
-            }
-            default:
-                break;
+            int H = Integer.parseInt(args[2]);
+            int W = Integer.parseInt(args[3]);
+            int BookSize = Integer.parseInt(args[4]);
+            var pixels = readImage(args[1]);
+            var book = CodeBookGenerator.generateCodeBook(pixels, H, W, BookSize);
+            var codes = CodeBookGenerator.Quantize(book);
+            buildCompressedImage(codes, book, "_out.ong");
+
+        } catch (
+                Exception ex) {
+            System.out.println(ex.getMessage());
         }
     }
 }

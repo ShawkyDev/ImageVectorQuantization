@@ -15,7 +15,6 @@ public class CodeBookGenerator {
             currentAverages = averageVector.split();
             reCalcAvg(currentAverages, vectors);
             while (currentAverages.size() < cnt) {
-                System.out.println("cur average = " + currentAverages.size());
                 var tmpAverages = new ArrayList<PixelMatrix>();
                 for (var vec : currentAverages)
                     tmpAverages.addAll(vec.split());
@@ -70,7 +69,7 @@ public class CodeBookGenerator {
             reCalcAvg(averages, PixelMatrices);
     }
 
-    public static String[][] BuildCompressed(ArrayList<PixelMatrix> book) throws Exception {
+    public static String[][] Quantize(ArrayList<PixelMatrix> book) throws Exception {
         var compressed = new String[_pixelMatrices.length][];
         for (int i = 0; i < _pixelMatrices.length; ++i) {
             compressed[i] = new String[_pixelMatrices[i].length];

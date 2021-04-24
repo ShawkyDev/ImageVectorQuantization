@@ -37,8 +37,9 @@ public class PixelMatrix {
     }
 
     public static PixelMatrix[][] getVectors(int[][] _arr, int _h, int _w) throws Exception {
-        if (_arr == null || _arr.length % _h != 0 || _arr[0].length % _w != 0)
-            throw new Exception("can't construct the array of vectors");
+        if (_arr == null || _arr.length / _h == 0 || _arr[0].length / _w == 0)
+            throw new Exception("can't construct the array of vectors\n" +
+                    "the chosen Height and Width of Vector is too big for the target image");
 
         int H = _arr.length / _h;
         int W = _arr[0].length / _w;
@@ -46,7 +47,6 @@ public class PixelMatrix {
         for (int r = 0; r < H; ++r) {
             for (int c = 0; c < W; ++c) {
                 PixelMatrix tmp = new PixelMatrix(_h, _w);
-                //System.out.println("r = " + r + " c = " + c);
                 for (int i = 0; i < _h; ++i) {
                     for (int j = 0; j < _w; ++j) {
                         tmp.arr[i][j] = new MyPixel(_arr[i + r * _h][j + c * _w]);
@@ -142,7 +142,6 @@ public class PixelMatrix {
     }
 
     public void print() {
-
         System.out.println("-----------------");
         for (int i = 0; i < h; ++i)
             for (int j = 0; j < w; ++j)
