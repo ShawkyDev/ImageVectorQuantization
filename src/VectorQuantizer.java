@@ -62,19 +62,19 @@ public class VectorQuantizer {
     }
     public static void main(String[] args) {
         try {
-            if (args.length < 5) {
+            if (args.length < 4) {
                 System.err.println("error : too few arguments");
                 System.out.println("the command should be:");
                 System.out.println("<Image-Path> <Vector-Height> <Vector-Width> <number-of-samples>");
                 return;
             }
-            int H = Integer.parseInt(args[2]);
-            int W = Integer.parseInt(args[3]);
-            int BookSize = Integer.parseInt(args[4]);
-            var pixels = readImage(args[1]);
+            int H = Integer.parseInt(args[1]);
+            int W = Integer.parseInt(args[2]);
+            int BookSize = Integer.parseInt(args[3]);
+            var pixels = readImage(args[0]);
             var book = CodeBookGenerator.generateCodeBook(pixels, H, W, BookSize);
             var codes = CodeBookGenerator.Quantize(book);
-            buildCompressedImage(codes, book, args[1]+"_out.ong");
+            buildCompressedImage(codes, book, args[0]+"_out.ong");
 
         } catch (
                 Exception ex) {
