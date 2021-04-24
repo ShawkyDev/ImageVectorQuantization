@@ -74,7 +74,7 @@ public class VectorQuantizer {
             var pixels = readImage(args[1]);
             var book = CodeBookGenerator.generateCodeBook(pixels, H, W, BookSize);
             var codes = CodeBookGenerator.Quantize(book);
-            buildCompressedImage(codes, book, "_out.ong");
+            buildCompressedImage(codes, book, args[1]+"_out.ong");
 
         } catch (
                 Exception ex) {
